@@ -5,5 +5,6 @@
 3. 增量同步通过解析MySQL的行复制日志，完成增量数据的同步  
 4. 通过编写so，实现转换的业务逻辑   
 5. 上下游ip，端口，需要导出的schema信息都存储在configservice中，configservice是一个用redis作为存储的基于django的pythonweb程序  
-6. 
+
+程序作为基础组件，在新浪以及微博的数据运维中，其可靠性得到了充分验证
 
