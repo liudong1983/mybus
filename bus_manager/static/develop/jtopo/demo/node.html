@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<meta name="viewport" content="user-scalable=no, width=device-width" />
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"/>
+	<title>jTopo Demo</title>
+	<meta name="description" content="jTopo免费的基于HTML5 Canvas的网络拓扑、关系图形库">
+	<meta name="keyword" content="jTopo 网络 拓扑 图形库 HTML5 Canvas 免费 关系图形库 javascript topology">	
+
+	<link rel="stylesheet" type="text/css" href="../css/base.css">
+	<link href="../css/jquery.snippet.min.css" rel="stylesheet">
+	<style>
+		.toolbar{
+			padding-left:20px;
+			background-color: rgb(216, 231, 242);
+			width: 832px;
+			height: 28px;
+			padding-top: 7px;"
+		}
+	</style>
+	
+	<script src="../js/jquery.js"></script>
+	<script src="../js/site.js"></script>
+	<script src="../js/demo.js"></script>
+	
+	<script type="text/javascript" src="js/snippet/jquery.snippet.min.js"></script>
+	<script type="text/javascript" src="js/jtopo-min.js"></script>
+	<script type="text/javascript" src="js/toolbar.js"></script>
+	
+	<script id='code'>
+		$(document).ready(function(){					
+			var canvas = document.getElementById('canvas');
+			var stage = new JTopo.Stage(canvas);
+			//显示工具栏
+			showJTopoToobar(stage);
+
+			var scene = new JTopo.Scene(stage);	
+			scene.background = './img/bg.jpg';
+					
+			var defaultNode = new JTopo.Node('微软雅黑');
+			defaultNode.font = '14px 微软雅黑';		
+			defaultNode.textOffsetY = 6; // 文字向下偏移6个像素
+			defaultNode.setLocation(210, 100);
+			scene.add(defaultNode);
+
+			var appleNode = new JTopo.Node();
+			appleNode.setImage('./img/OS_Apple.png', true);
+			appleNode.setLocation(320, 80);
+			appleNode.showSelected = false; // 不显示选中矩形
+			scene.add(appleNode);
+
+			var textNode = new JTopo.TextNode('This is a text node.');
+			textNode.font = 'bold 16px 微软雅黑';
+			textNode.setLocation(317, 250);
+			scene.add(textNode);
+			
+			var linkNode = new JTopo.LinkNode('超链接：http://www.jtopo.com');
+			linkNode.href = 'http://www.jtopo.com';
+			linkNode.target = '_blank'; // 新窗口打开链接
+			linkNode.font = 'italic bold 16px 微软雅黑';
+			linkNode.visitedColor = '0,0,255'; // 访问过的链接为蓝色
+			linkNode.shadowOffsetX = 5; // 阴影设置
+			linkNode.shadowOffsetY = 16;
+			linkNode.setLocation(250, 360);
+			scene.add(linkNode);
+			
+			var peopleNode = new JTopo.Node('people');
+			peopleNode.setBound(500, 210, 64, 64); // 同时设置大小及位置
+			peopleNode.setImage('./img/person.png');
+			scene.add(peopleNode);
+
+			var circleNode = new JTopo.CircleNode('node');
+			circleNode.radius = 24; // 半径
+			circleNode.alpha = 0.7; // 透明度
+			circleNode.fillColor = '0, 0, 255'; // 填充颜色
+			circleNode.setLocation(508, 100);
+			circleNode.textPosition = 'Middle_Center'; // 文本位置
+			scene.add(circleNode);
+
+			var node = new JTopo.Node("自定义");				
+			node.percent = 0.8;
+			node.beginDegree = 0;
+			node.width = node.height = 60;
+			node.setLocation(200, 210);
+			node.paint = function(g){
+				g.beginPath();
+				g.moveTo(0,0);
+				g.fillStyle = 'rgba(0,255,0,' + this.alpha + ')';
+				g.arc(0, 0, this.width/2, this.beginDegree, this.beginDegree + 2*Math.PI*this.percent);
+				g.fill();				
+				g.closePath();
+				
+				g.save();				
+				g.beginPath();
+				g.fillStyle = 'rgba(255,255,0,' + this.alpha + ')';
+				g.moveTo(0,0);
+				g.arc(0, 0, this.width/2-10, this.beginDegree, this.beginDegree + 2*Math.PI);				
+				g.fill();
+				g.closePath();								
+				g.restore();
+								
+				this.paintText(g);
+			};			
+			scene.add(node);
+		});
+	</script>
+  </head>
+
+  <body>
+
+	<center>
+	<div class="wrap_div">
+		<div class="head_nav">
+			<h2 class="logo"><a href="index.html" title="jTopo">jTopo</a></h2>
+		</div>		
+		<div class="head_nav_second">			
+			<ul class="menu" id="nav_menu">
+			
+			</ul>
+		</div>
+		<div class="content">
+		  <div class="left">
+			<ul id="menu">
+			
+			</ul>
+		  </div>
+		  <div class="right">		
+				<div id="content">					<canvas width="850" height="550" id="canvas"></canvas>				
+					
+				</div>
+		  </div>
+		  <div class="clear"></div>
+		</div>
+	</div>
+	</center>
+	<div class="footer">
+		&nbsp;
+	</div>
+  
+	<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1000418207'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1000418207%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+</body>
+
+</html>

@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>jTopo API Documentation</title>
+	<meta name="description" content="jTopo免费的基于HTML5 Canvas的网络拓扑、关系图形库">
+	<meta name="keyword" content="jTopo 网络 拓扑 图形库 HTML5 Canvas 免费 关系图形库 javascript topology">
+	<link rel="stylesheet" type="text/css" href="css/base.css">
+	<script src="js/jquery.js"></script>
+	<script src="js/site.js"></script>
+	<script src="js/api.js"></script>	
+  </head>
+  <body>
+	<div id="global-nav">
+		&nbsp;
+	</div>
+	<center>
+	<div class="wrap_div">
+		<div class="head_nav">
+			<h2 class="logo"><a href="index.html" title="jTopo">jTopo</a></h2>
+		</div>		
+		<div class="head_nav_second">			
+			<ul class="menu" id="nav_menu">
+			
+			</ul>
+		</div>
+		<div class="content" style="height:1500px;">
+			<div class="left" style="width: 100%;">
+				<ul>
+					<li><a href="download/jtopo-0.4.2-min.js" style="color: #7ACEF4;">jtopo-0.4.2-min.js</a>&nbsp;<strong><i>2014-05-14</i></strong>
+						<div>
+							发布说明：
+							<p>修改了Link对象，增加了两节点之间画多条线的功能。</p>
+							<a href="demo/bundlelink.html" style="color:orange">示例</a>														
+						</div>
+					</li>
+					<li><a href="download/jtopo-0.4.1-min.js" style="color: #7ACEF4;">jtopo-0.4.1-min.js</a>&nbsp;<strong><i>2014-05-03</i></strong>
+						<div>
+							发布说明：
+							<p>1. 增加了工具栏</p>							
+							<p>2. 增加类似jQuery的查询功能</p>
+							<p>3. 增加了序列化、反序列化功能</p>
+							<p>4. 增加了保存、撤销功能</p>
+							<p>5. 增加了Demo版的饼图、柱状图</p>
+							<p>6. 解决了火狐下鼠标滚轮事件不正常的问题</p>
+							<p>7. 完善了告警功能</p>
+							<p>8. 修改了Link的一些属性命名</p>
+							<p>9. 其他细节变动</p>
+						</div>
+					</li>
+					<li><a href="download/jtopo-0.4.0-min.js" style="color: #7ACEF4;">jtopo-0.4.0-min.js</a>&nbsp;<strong><i>2014-05-02</i></strong>
+						<div>
+							发布说明：
+							<p>1. 迈向成熟、专业的开始</p>							
+							<p>2. 核心架构有所调整、对象的一些属性做了调整(不兼容以前的版本)</p>
+							<p>3. 增加了鹰眼、缩放、完整导出等一系列功能</p>
+							<p>4. 修改了一些Demo</p>
+						</div>
+					</li>
+					<li><a href="download/jtopo-0.3.6-min.js" style="color: #7ACEF4;">jtopo-0.3.6-min.js</a>&nbsp;<strong><i>2014-03-06</i></strong>
+						<div>
+							发布说明：
+							<p>1. 性能提升</p>							
+							<a href="demo/performance_test.html" style="color:orange">示例</a>							
+							<a href="demo/performance_asyn.html" style="color:orange">示例2</a>
+						</div>
+					</li>
+					<li><a href="download/jtopo-0.3.5-min.js" style="color: #7ACEF4;">jtopo-0.3.5-min.js</a>&nbsp;<strong><i>2013-12-21</i></strong>
+						<div>
+							发布说明：
+							<p>1. 优化字体的渲染。</p>							
+						</div>
+					</li>
+					<li><a href="download/jtopo-0.3.4-min.js" style="color: #7ACEF4;">jtopo-0.3.4-min.js</a>&nbsp;<strong><i>2013-11-27</i></strong>
+						<div>
+							发布说明：
+							<p>1. 给Link对象增加了事件处理（直线型的）</p>
+							<p>2. 修复了mouseover、mouseout的时候，获取不到事件Event对象的target属性</p>	
+							<a href="demo/topo.html" style="color:orange">示例</a>							
+						</div>
+					</li>
+					<li><a href="download/jtopo-0.3.3-all.zip" style="color: #7ACEF4;">jtopo-0.3.3-all.zip</a>&nbsp;<strong><i>2013-10-28</i></strong>
+						<div>
+							发布说明：
+							<p>1. 增加了编辑模式（可以在线编辑节点）、拖拽模式<a href="demo/stage-mode.html" style="color:orange">示例</a></p>
+							<p>2. 增加了ctrl+鼠标多节点选择功能</p>
+						</div>
+					</li>
+					<li><a href="download/jtopo-0.3.3-min.js" style="color: #7ACEF4;">jtopo-0.3.3-min.js</a> &nbsp;<span><strong><i>2013-10-28</i></strong>压缩后的js文件，可以直接在项目中引用</span></li>
+					<li><a href="download/jtopo-0.3.2-all.zip" style="color: #7ACEF4;">jtopo-0.3.2-all.zip</a>&nbsp;<strong><i>2013-10-23</i></strong>
+						<div>
+							发布说明：
+							<p>1. 增加了鼠标单击、双击、右键事件处理<a href="demo/helloworld.html" style="color:orange">示例</a></p>
+							<p>2. 增加了鼠标右键菜单Demo<a href="demo/right-menu.html" style="color:orange">示例</a></p>
+							<p>3. JTopo.scene对象增加了删除元素的功能(右键菜单-&gt;删除)<a href="demo/right-menu.html" style="color:orange">示例</a></p>
+							<p>4. 增加了子网下钻Demo<a href="demo/topo-level.html" style="color:orange">示例</a></p>
+							<p>5. 修复了鼠标操作松开后，节点仍然跟随鼠标移动的问题</p>
+						</div>
+					</li>
+					<li><a href="download/jtopo-0.3.2-min.js" style="color: #7ACEF4;">jtopo-0.3.2-min.js</a> &nbsp;<span><strong><i>2013-10-23</i></strong>压缩后的js文件，可以直接在项目中引用</span></li>
+					
+					<li><a href="download/jtopo-0.3.1-all.zip" style="color: #7ACEF4;">jtopo-0.3.1-all.zip</a>&nbsp;2013-10-22<span>完整的压缩包，里面包含文档、Demo、API文档</span></li>
+					<li><a href="download/jtopo-0.3.1-min.js" style="color: #7ACEF4;">jtopo-0.3.1-min.js</a><span>压缩后的js文件，可以直接在项目中引用</span></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	</center>
+	<div class="footer">
+		&nbsp;
+	</div>
+  <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1000418207'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1000418207%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+</body>
+</html>

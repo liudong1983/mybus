@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"/>
+	<title>jTopo Demo</title>
+	<meta name="description" content="jTopo免费的基于HTML5 Canvas的网络拓扑、关系图形库">
+	<meta name="keyword" content="jTopo 网络 拓扑 图形库 HTML5 Canvas 免费 关系图形库 javascript topology">	
+
+	<link rel="stylesheet" type="text/css" href="../css/base.css">
+	<link href="../css/jquery.snippet.min.css" rel="stylesheet">
+	
+	<script src="../js/jquery.js"></script>
+	<script src="../js/site.js"></script>
+	<script src="../js/demo.js"></script>
+	
+	<script type="text/javascript" src="js/snippet/jquery.snippet.min.js"></script>
+	
+	<script type="text/javascript" src="js/jtopo-min.js"></script>
+	<script type="text/javascript" src="js/toolbar.js"></script>
+	
+	<script id='code'>				
+		$(document).ready(function(){										
+			var canvas = document.getElementById('canvas');
+			var stage = new JTopo.Stage(canvas);
+			stage.frames = -24;
+			//显示工具栏
+			showJTopoToobar(stage);
+
+			var scene = new JTopo.Scene(stage);	
+			scene.background = './img/bg.jpg';
+
+			// ---------- FoldLink
+			var fromNode = new JTopo.Node('from');
+			fromNode.setSize(60, 60);
+			fromNode.setLocation(100, 80);
+			scene.add(fromNode);
+			
+			var node = new JTopo.Node("to");	
+			node.setSize(60, 60);
+			node.setLocation(300, 200);
+			scene.add(node);
+			
+			for(var i=0; i<5; i++){
+				var link = new JTopo.Link(fromNode, node, 'Link' + i);		
+				link.lineWidth = 3; // 线宽
+				link.bundleOffset = 60; // 折线拐角处的长度
+				link.bundleGap = 20; // 线条之间的间隔
+				link.textOffsetY = 3; // 文本偏移量（向下3个像素）
+				link.strokeColor = JTopo.util.randomColor(); // 线条颜色随机
+				scene.add(link);
+			}
+			
+			// ---------- FoldLink
+			var fromNode = new JTopo.Node('from');
+			fromNode.setSize(60, 60);
+			fromNode.setLocation(100, 320);
+			scene.add(fromNode);
+			
+			var node = new JTopo.Node("to");	
+			node.setSize(60, 60);
+			node.setLocation(300, 470);
+			scene.add(node);
+			
+			for(var i=0; i<3; i++){
+				var link = new JTopo.FoldLink(fromNode, node, 'Link' + i);
+				link.direction = 'h';
+				link.arrowsRadius = 10;
+				link.lineWidth = 3; // 线宽
+				link.bundleOffset = 60; // 折线拐角处的长度
+				link.bundleGap = 20; // 线条之间的间隔
+				link.textOffsetY = 3; // 文本偏移量（向下3个像素）
+				link.strokeColor = JTopo.util.randomColor(); // 线条颜色随机
+				scene.add(link);
+			}
+
+			// -----------FlexionalLink
+			var fromNode = new JTopo.Node('from');
+			fromNode.setSize(60, 60);
+			fromNode.setLocation(500, 60);
+			scene.add(fromNode);
+			
+			var node = new JTopo.Node("to");	
+			node.setSize(60, 60);
+			node.setLocation(550, 200);
+			scene.add(node);
+			
+			for(var i=0; i<3; i++){
+				var link = new JTopo.FlexionalLink(fromNode, node, 'L' + i);
+				link.lineWidth = 3; // 线宽
+				link.offsetGap = 50;
+				link.bundleGap = 20; // 线条之间的间隔
+				link.textOffsetY = 3; // 文本偏移量（向下3个像素）
+				link.strokeColor = JTopo.util.randomColor(); // 线条颜色随机
+				scene.add(link);
+			}
+			
+			// 连线的阴影去掉, 增加点击事件（字体颜色变成黄色）
+			stage.find('link').attr('shadow', false).click(function(event){
+				this.fontColor = '255,255,0';
+			});
+			
+			// --------- loop
+			var loopNode = new JTopo.Node("loop");		
+			loopNode.setLocation(600, 400);
+			scene.add(loopNode);
+			for(var i=0; i<3; i++){
+				var link = new JTopo.Link(loopNode, loopNode);
+				link.lineWidth = 3; // 线宽
+				link.bundleGap = 30; // 线条之间的间隔
+				link.textOffsetY = 3; // 文本偏移量（向下3个像素）
+				link.strokeColor = JTopo.util.randomColor(); // 线条颜色随机
+				link.type = 'loop'; // 自定义属性
+				scene.add(link);
+			}
+			
+			// 设置所有节点的颜色为绿色
+			stage.find('node').attr('fillColor', '0,255,0');
+		});
+	</script>
+  </head>
+
+  <body>
+
+	<center>
+	<div class="wrap_div">
+		<div class="head_nav">
+			<h2 class="logo"><a href="index.html" title="jTopo">jTopo</a></h2>
+		</div>		
+		<div class="head_nav_second">			
+			<ul class="menu" id="nav_menu">
+			
+			</ul>
+		</div>
+		<div class="content">
+		  <div class="left">
+			<ul id="menu">
+			
+			</ul>
+		  </div>
+		  <div class="right">
+				<div id="content">					<canvas width="850" height="550" id="canvas"></canvas>	
+					
+				</div>
+		  </div>
+		  <div class="clear"></div>
+		</div>
+	</div>
+	</center>
+	<div class="footer">
+		&nbsp;
+	</div>
+  
+	<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1000418207'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1000418207%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+</body>
+
+</html>

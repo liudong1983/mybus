@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"/>
+	<title>jTopo Demo</title>
+	<link rel="stylesheet" type="text/css" href="../css/base.css">
+	<link href="../css/jquery.snippet.min.css" rel="stylesheet">
+	
+	<script src="../js/jquery.js"></script>
+	<script src="../js/site.js"></script>
+	<script src="../js/demo.js"></script>
+	
+	<script type="text/javascript" src="js/snippet/jquery.snippet.min.js"></script>
+	
+	<script type="text/javascript" src="js/jtopo-min.js"></script>
+	<script type="text/javascript" src="js/toolbar.js"></script>
+	
+	<script id='code'>				
+		$(document).ready(function(){					
+			var canvas = document.getElementById('canvas');
+			var stage = new JTopo.Stage(canvas);
+			//显示工具栏
+			showJTopoToobar(stage);
+
+			var scene = new JTopo.Scene();	
+			stage.showToolbar = false;
+			scene.mode = 'select';
+
+			scene.setBackground('./img/win7/desktop.png');
+			
+			var node = new JTopo.Node("计算机");							
+			node.setImage('./img/win7/mycomputer.png', true);
+			node.setLocation(20, 30);
+			scene.add(node);
+			
+			var recycleNode = new JTopo.Node("回收站");							
+			recycleNode.setImage('./img/win7/recycle.png', true);
+			recycleNode.setLocation(20, 30+72);
+			scene.add(recycleNode);			
+					
+			for(var i=1; i<3; i++){
+				for(var j=0; j<2; j++){
+					var node = new JTopo.Node();								
+					if(Math.random() > 0.7){
+						node.setImage('./img/win7/word.png', true);
+						node.text = "文档";
+					}else if(Math.random() > 0.3){
+						node.setImage('./img/win7/folder.png', true);
+						node.text = "文件夹"+i+'-'+j;
+					}else{
+						node.setImage('./img/win7/excel.png', true);
+						node.text = "表格";
+					}
+					node.setLocation(20 + i*72, 30 + j*72);
+					scene.add(node);		
+				}
+			}
+
+			stage.add(scene);
+		});
+	</script>
+  </head>
+
+  <body>
+
+	<center>
+	<div class="wrap_div">
+		<div class="head_nav">
+			<h2 class="logo"><a href="index.html" title="jTopo">jTopo</a></h2>
+		</div>		
+		<div class="head_nav_second">			
+			<ul class="menu" id="nav_menu">
+			
+			</ul>
+		</div>
+		<div class="content">
+		  <div class="left">
+			<ul id="menu">
+			
+			</ul>
+		  </div>
+		  <div class="right">
+				<div id="content">					<canvas width="850" height="550" id="canvas"></canvas>	
+					
+				</div>
+		  </div>
+		  <div class="clear"></div>
+		</div>
+	</div>
+	</center>
+	<div class="footer">
+		&nbsp;
+	</div>
+  <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1000418207'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1000418207%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+	</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"/>
+	<title>jTopo Demo</title>
+	<meta name="description" content="jTopo免费的基于HTML5 Canvas的网络拓扑、关系图形库">
+	<meta name="keyword" content="jTopo 网络 拓扑 图形库 HTML5 Canvas 免费 关系图形库 javascript topology">	
+
+	<link rel="stylesheet" type="text/css" href="../css/base.css">
+	<link href="../css/jquery.snippet.min.css" rel="stylesheet">
+	<script src="../js/jquery.js"></script>
+	<script src="../js/site.js"></script>
+<!--	<script src="../js/demo.js"></script>代码显示 -->	
+	
+	<script type="text/javascript" src="js/snippet/jquery.snippet.min.js"></script>	
+	<script type="text/javascript" src="js/jtopo-min.js"></script>
+	<script type="text/javascript" src="js/toolbar.js"></script>	
+	<script id='code'>				
+		$(document).ready(function(){					
+			var canvas = document.getElementById('canvas');
+			var stage = new JTopo.Stage(canvas);
+			//显示工具栏
+			showJTopoToobar(stage);
+			var scene = new JTopo.Scene();	
+			scene.background = './img/bg.jpg';
+			function node(x, y, img){
+				var node = new JTopo.Node();
+				node.setImage('./img/statistics/' + img, true);				
+				node.setLocation(x, y);
+				scene.add(node);
+				return node;
+			}				
+			function linkNode(nodeA, nodeZ, f){
+				var link;
+				if(f){
+					link = new JTopo.FoldLink(nodeA, nodeZ);
+				}else{
+					link = new JTopo.Link(nodeA, nodeZ);
+				}
+				link.direction = 'vertical';
+				scene.add(link);
+				return link;
+			}
+			function hostLink(nodeA, nodeZ){				
+				var link = new JTopo.FlexionalLink(nodeA, nodeZ);				
+				link.shadow = false;
+				link.offsetGap = 44;
+				scene.add(link);
+				return link;
+			}
+
+			var s1 = node(125, 43, 'server.png');
+			s1.alarm = '10.73.11.21:5000';
+			var s2 = node(225, 43, 'server.png');
+			s2.alarm = '10.73.11.21:5001';
+			var s3 = node(325, 43, 'server.png');
+			s3.alarm = '10.73.11.21:5002';
+			var s4 = node(425, 43, 'server.png');
+			s4.alarm = '10.73.11.21:5002';
+			var s5 = node(525, 43, 'server.png');
+			s5.alarm = '10.73.11.21:5002';
+			
+			var bus1 = node(166, 225, 'center.png');//gather.png
+			bus1.alarm = 'bus1';
+			var bus2 = node(466, 225, 'center.png');
+			bus2.alarm = 'bus2';
+			
+			linkNode(s1, bus1, false);
+			linkNode(s2, bus1, false);
+			linkNode(s3, bus1, false);
+				
+			linkNode(s4, bus2, false);
+			linkNode(s5, bus2, false);
+		
+		//	linkNode(w2, bus2);
+			
+		
+			var h1 = node(118, 500, 'host.png');
+			h1.alarm = 'dist1';
+			var h2 = node(218, 500, 'host.png');
+			var h3 = node(318, 500, 'host.png');
+			h3.alarm = 'dist3';
+			var h4 = node(418, 500, 'host.png');
+			var h5 = node(518, 500, 'host.png');
+			h5.alarm = 'dist5';
+			
+				linkNode(bus1, h1);
+			linkNode(bus1, h2);
+			linkNode(bus1, h3);
+			linkNode(bus1, h4);
+			linkNode(bus1, h5);
+			
+			linkNode(bus2, h1);
+			linkNode(bus2, h2);
+			linkNode(bus2, h3);
+			linkNode(bus2, h4);
+			linkNode(bus2, h5);
+			
+			stage.add(scene);
+		//	stage.centerAndZoom();
+		});
+	</script>
+  </head>
+
+<body>
+<center>
+			<div id="content">
+			<canvas width="850" height="550" id="canvas"></canvas>	
+			</div>
+</center>
+</body>
+
+</html>

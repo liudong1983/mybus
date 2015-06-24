@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"/>
+	<title>jTopo Demo</title>
+	<meta name="description" content="jTopo免费的基于HTML5 Canvas的网络拓扑、关系图形库">
+	<meta name="keyword" content="jTopo 网络 拓扑 图形库 HTML5 Canvas 免费 关系图形库 javascript topology">	
+
+	<link rel="stylesheet" type="text/css" href="../css/base.css">
+	<link href="../css/jquery.snippet.min.css" rel="stylesheet">
+	
+	<script src="../js/jquery.js"></script>
+	<script src="../js/site.js"></script>
+	<script src="../js/demo.js"></script>
+	
+	<script type="text/javascript" src="js/snippet/jquery.snippet.min.js"></script>
+	
+	<script type="text/javascript" src="js/jtopo-min.js"></script>
+	<script type="text/javascript" src="js/toolbar.js"></script>
+	
+	<script id='code'>
+		var stage;
+		$(document).ready(function(){
+			var canvas = document.getElementById('canvas');			
+			stage = new JTopo.Stage(canvas);
+			//显示工具栏
+			showJTopoToobar(stage);
+
+			var scene = new JTopo.Scene();
+			scene.background = './img/bg.jpg';
+			stage.add(scene);
+			
+			// 不指定布局的时候，容器的布局为自动(容器边界随元素变化）
+			var container = new JTopo.Container();
+			scene.add(container);
+			
+			for(var i=0; i<5; i++){
+				var node = new JTopo.Node("A_"+i);	
+				node.textPosition = "Middle_Center";
+				node.setLocation(300+ Math.random() * 300, 200+ Math.random() * 200);
+				scene.add(node);
+				container.add(node);
+			}
+			scene.add(new JTopo.Link(container.elements[0], container.elements[1]));
+			scene.add(new JTopo.Link(container.elements[2], container.elements[3]));
+			
+			// 流式布局（水平、垂直间隔均为10)
+			var flowLayout = JTopo.Layout.FlowLayout(10, 10);
+			
+			// 网格布局(4行3列)
+			var gridLayout = JTopo.Layout.GridLayout(4, 3);
+			
+			var container2 = new JTopo.Container();
+			container2.layout = flowLayout;
+			container2.fillColor = '10,10,100';
+			container2.setBound(10, 10, 300, 200);
+			scene.add(container2);
+			
+			for(var i=0; i<12; i++){
+				var node = new JTopo.Node("F_" + i);	
+				node.textPosition = "Middle_Center";
+				scene.add(node);
+				container2.add(node);
+			}
+			
+			container2.click(function(){
+				if(container2.layout === flowLayout){
+					container2.layout = gridLayout;
+				}else{
+					container2.layout = flowLayout;
+				}
+			});
+		});
+	</script>
+  </head>
+
+  <body>
+
+	<center>
+	<div class="wrap_div">
+		<div class="head_nav">
+			<h2 class="logo"><a href="index.html" title="jTopo">jTopo</a></h2>
+		</div>		
+		<div class="head_nav_second">			
+			<ul class="menu" id="nav_menu">
+			
+			</ul>
+		</div>
+		<div class="content">
+		  <div class="left">
+			<ul id="menu">
+			
+			</ul>
+		  </div>
+		  <div class="right">
+				<div id="content">					<canvas width="850" height="550" id="canvas"></canvas>	
+									
+				</div>
+		  </div>
+		  <div class="clear"></div>
+		</div>
+	</div>
+	</center>
+	<div class="footer">
+		&nbsp;
+	</div>
+
+  <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1000418207'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1000418207%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+	</body>
+</html>

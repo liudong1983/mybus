@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"/>
+	<title>jTopo Demo</title>
+	<meta name="description" content="jTopo免费的基于HTML5 Canvas的网络拓扑、关系图形库 性能测试">
+	<meta name="keyword" content="jTopo 网络 拓扑 图形库 HTML5 Canvas 免费 关系图形库 javascript topology 性能测试">	
+	
+	<link rel="stylesheet" type="text/css" href="../css/base.css">
+	<link href="../css/jquery.snippet.min.css" rel="stylesheet">
+	
+	<script src="../js/jquery.js"></script>
+	<script src="../js/site.js"></script>
+	<script src="../js/demo.js"></script>
+	
+	<script type="text/javascript" src="js/snippet/jquery.snippet.min.js"></script>
+	
+	<script type="text/javascript" src="js/jtopo-min.js"></script>
+	<script type="text/javascript" src="js/toolbar.js"></script>
+	
+	<script id='code'>
+		var isPause = true;
+		
+		function pause(){
+			isPause = (isPause == true ? false : true);
+			$('#btn').attr('value', (isPause == true ? "继 续":"暂 停"));
+		}
+	
+		$(document).ready(function(){								
+			var canvas = document.getElementById('canvas');
+			var stage = new JTopo.Stage(canvas);
+			//显示工具栏
+			showJTopoToobar(stage);
+
+			var scene = new JTopo.Scene();	
+			scene.background = './img/bg.jpg';
+			scene.mode = 'drag';
+			scene.shadow = false;
+			
+			// 无动画(鼠标不做动作时CPU利用率为0)
+			stage.hasAnimate = false;            
+						
+			// 节点数量(最大为100万）
+			var nodeCount = 1000000; 
+			
+			// 疏密程度（控制随机坐标范围, 越大越稀松）
+			var p = 50000;
+			
+			var counter = 0;
+			
+			// 每次循环创建两个节点、一条连线
+			function addOnePair(){
+				var nodeFrom = new JTopo.Node("From_" + (++counter));
+				nodeFrom.setSize(5,5);	
+				nodeFrom.setLocation(Math.random()*p - Math.random() * p, Math.random() * p - Math.random() * p);	
+				var color = Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255);
+				nodeFrom.fillStyle = color;
+				scene.add(nodeFrom);				
+				
+				var nodeTo = new JTopo.Node("To_" + (++counter));	
+				nodeTo.setSize(5,5);				
+				nodeTo.setLocation(Math.random()*p - Math.random() * p, Math.random() * p - Math.random() * p);
+				scene.add(nodeTo);
+				
+				scene.add(new JTopo.Link(nodeFrom, nodeTo));							
+			}
+			
+			function add(){		
+				for(var i=0; i<2000; i++){
+					if(isPause == true){
+						continue;
+					}
+					addOnePair();
+					if(counter > nodeCount) return;
+					
+				}
+				stage.repaint();
+				$('#node_num').html("当前节点：" + counter + '个， 连线:' + (counter/2) + '个');				
+				setTimeout(add, 100);
+			}
+				
+			add();
+			stage.add(scene);
+			
+		});
+	</script>	
+  </head>
+
+  <body>
+
+	<center>
+	<div class="wrap_div">
+		<div class="head_nav">
+			<h2 class="logo"><a href="index.html" title="jTopo">jTopo</a></h2>
+		</div>		
+		<div class="head_nav_second">			
+			<ul class="menu" id="nav_menu">
+			
+			</ul>
+		</div>		
+		<div class="content">			
+		  <div class="left">
+			<ul id="menu">
+			
+			</ul>
+		  </div>
+		  <div class="right">
+			<center>
+			<h2 id="node_num"></h2>
+			设定了最多创建100万个，视机器配置量力而行！
+			<input style="width:120px;height:30px;" type="button" onclick="pause()" value="开 始" id="btn"/>
+			</center>
+				<div id="content">					<canvas width="850" height="550" id="canvas"></canvas>	
+					
+				</div>
+		  </div>
+		  <div class="clear"></div>
+		</div>
+	</div>
+	</center>
+	<div class="footer">
+		&nbsp;
+	</div>
+  <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1000418207'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1000418207%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+	</body>
+</html>

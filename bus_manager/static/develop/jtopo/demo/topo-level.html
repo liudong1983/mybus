@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"/>
+	<title>jTopo Demo</title>
+	<meta name="description" content="jTopo免费的基于HTML5 Canvas的网络拓扑、关系图形库">
+	<meta name="keyword" content="jTopo 网络 拓扑 图形库 HTML5 Canvas 免费 关系图形库 javascript topology">	
+
+	<link rel="stylesheet" type="text/css" href="../css/base.css">
+	<link href="../css/jquery.snippet.min.css" rel="stylesheet">
+	
+	<script src="../js/jquery.js"></script>
+	<script src="../js/site.js"></script>
+	<script src="../js/demo.js"></script>
+	
+	<script type="text/javascript" src="js/snippet/jquery.snippet.min.js"></script>
+	
+	<script type="text/javascript" src="js/jtopo-min.js"></script>
+	<script type="text/javascript" src="js/toolbar.js"></script>
+	
+	<script id='code'>			
+		$(document).ready(function(){					
+			var canvas = document.getElementById('canvas');
+			var stage = new JTopo.Stage(canvas);
+			//显示工具栏
+			showJTopoToobar(stage);
+
+			var scene = new JTopo.Scene();	
+			scene.background = './img/bg.jpg';
+			stage.add(scene);
+			
+			var textNode = new JTopo.TextNode('双击主机下钻');
+			textNode.setLocation(366, 431);
+			scene.add(textNode);	
+			
+			var cloudNode = new JTopo.Node();
+			cloudNode.setImage('./img/cloud.png');
+			cloudNode.setSize(64, 64);
+			cloudNode.setCenterLocation(canvas.width/2, canvas.height/3);			
+			cloudNode.layout = {type: 'tree', width: 140, height: 150};
+			scene.add(cloudNode);			
+			
+			for(var i=1; i<6; i++){
+				var node = new JTopo.Node('Host_' + i);
+				node.setImage('./img/host.png');				
+				node.setLocation(scene.width * Math.random(), scene.height * Math.random());
+				scene.add(node);								
+				var link = new JTopo.Link(cloudNode, node);
+				scene.add(link);
+			}			
+			scene.layoutNode(cloudNode);
+			
+			// 双击节点下钻
+			scene.addEventListener('dbclick', function(e){
+				var node = e.target;
+				// 主机
+				if(node && node.text && node.text.indexOf('Host') != -1){
+					showSubscene(node);					
+				}				
+			});
+			
+			// 显示子场景
+			function showSubscene(node){
+				var subScene = new JTopo.Scene();
+				subscene.background = './img/bg.jpg';
+				
+				var textNode = new JTopo.TextNode('双击空白处返回上一级');
+				textNode.setLocation(320, 431);
+				subScene.add(textNode);
+			
+				var hostNode = new JTopo.Node(node.text);
+				hostNode.setImage('./img/host.png');
+				hostNode.setCenterLocation(canvas.width/2, canvas.height/2);
+				hostNode.layout = {type: 'star', radius:150};
+				subScene.add(hostNode);
+				for(var i=1; i<10; i++){
+					var vmNode = new JTopo.Node();
+					vmNode.setImage('./img/vm.png');					
+					vmNode.setLocation(scene.width * Math.random(), scene.height * Math.random());
+					subScene.add(vmNode);								
+					var link = new JTopo.Link(hostNode, vmNode);
+					subScene.add(link);
+				}
+				subScene.layoutNode(hostNode);	
+				
+				subScene.addEventListener('dbclick', function(e){
+					// 双击空白返回
+					if(! e.target){
+						// 删除子场景
+						stage.remove(subScene);
+						// 切换到上一级场景
+						stage.add(scene);
+					}			
+				});
+				stage.add(subScene);
+			}	
+		});
+	</script>
+  </head>
+
+  <body>
+
+	<center>
+	<div class="wrap_div">
+		<div class="head_nav">
+			<h2 class="logo"><a href="index.html" title="jTopo">jTopo</a></h2>
+		</div>		
+		<div class="head_nav_second">			
+			<ul class="menu" id="nav_menu">
+			
+			</ul>
+		</div>
+		<div class="content">
+		  <div class="left">
+			<ul id="menu">
+			
+			</ul>
+		  </div>
+		  <div class="right">
+				<div id="content">					<canvas width="850" height="550" id="canvas"></canvas>	
+					
+				</div>
+		  </div>
+		  <div class="clear"></div>
+		</div>
+	</div>
+	</center>
+	<div class="footer">
+		&nbsp;
+	</div>
+  <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1000418207'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1000418207%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+	</body>
+</html>

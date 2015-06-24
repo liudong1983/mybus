@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"/>
+	<title>jTopo Demo 自动布局</title>
+	<link rel="stylesheet" type="text/css" href="../css/base.css">
+	<link href="../css/jquery.snippet.min.css" rel="stylesheet">
+	
+	<script src="../js/jquery.js"></script>
+	<script src="../js/site.js"></script>
+	<script src="../js/demo.js"></script>
+	
+	<script type="text/javascript" src="js/snippet/jquery.snippet.min.js"></script>
+	
+	<script type="text/javascript" src="js/jtopo-min.js"></script>
+	<script type="text/javascript" src="js/toolbar.js"></script>
+	
+	<script id='code'>			
+		$(document).ready(function(){					
+			var canvas = document.getElementById('canvas');
+			var stage = new JTopo.Stage(canvas);
+			//显示工具栏
+			showJTopoToobar(stage);
+
+			var scene = new JTopo.Scene(stage);	
+			scene.background = './img/bg.jpg';
+			
+			var cloudNode = new JTopo.Node("cloud");
+			cloudNode.setImage('./img/host.png', true);
+			scene.add(cloudNode);
+			
+			// 随机生成一棵树(节点不设置坐标，默认:x、y均为0)
+			for(var i=0; i<2 + Math.random() * 4; i++){
+				if(i > 0 && Math.random() < 0.2) continue;
+				var node = new JTopo.Node('H-' + i);
+				scene.add(node);								
+				var link = new JTopo.Link(cloudNode, node);				
+				
+				for(var j=0; j<Math.random() * 6; j++){
+					if(Math.random() < 0.3) continue;
+					var vmNode = new JTopo.Node('v' + i + '-' + j);
+					vmNode.setImage('./img/vm.png', true);
+					scene.add(new JTopo.Link(node, vmNode));
+					scene.add(vmNode);
+					for(var k=0; k<Math.random() * 4; k++){
+						if(Math.random() < 0.3) continue;
+						var diskNode = new JTopo.Node('D-' + k);
+						scene.add(new JTopo.Link(vmNode, diskNode));
+						scene.add(diskNode);
+						
+						for(var n=0; n<Math.random() * 3; n++){
+							if(Math.random() < 0.3) continue;
+							var volNode = new JTopo.Node('V_' + n);
+							volNode.textPosition = "Middle_Center";
+							scene.add(new JTopo.Link(diskNode, volNode));
+							scene.add(volNode);
+						}	
+					}	
+				}
+				scene.add(link);
+			}
+			
+			// 树形布局
+			var downTreeLayout = JTopo.Layout.TreeLayout();
+			var upTreeLayout = JTopo.Layout.TreeLayout('up');
+			var leftTreeLayout = JTopo.Layout.TreeLayout('left');
+			var rightTreeLayout = JTopo.Layout.TreeLayout('right');
+
+			scene.doLayout(downTreeLayout);
+			
+			var layouts = [downTreeLayout, leftTreeLayout, upTreeLayout, rightTreeLayout];
+
+			var n = 1;
+			scene.click(function(){
+				scene.doLayout(layouts[n++]);
+				if(n == 4) n = 0;
+			});
+		});
+	</script>
+  </head>
+
+  <body>
+
+	<center>
+	<div class="wrap_div">
+		<div class="head_nav">
+			<h2 class="logo"><a href="index.html" title="jTopo">jTopo</a></h2>
+		</div>		
+		<div class="head_nav_second">			
+			<ul class="menu" id="nav_menu">
+			
+			</ul>
+		</div>
+		<div class="content">
+		  <div class="left">
+			<ul id="menu">
+			
+			</ul>
+		  </div>
+		  <div class="right">
+				<div id="content">					<canvas width="850" height="550" id="canvas"></canvas>	
+					
+				</div>
+		  </div>
+		  <div class="clear"></div>
+		</div>
+	</div>
+	</center>
+	<div class="footer">
+		&nbsp;
+	</div>
+  <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1000418207'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1000418207%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+	</body>
+</html>

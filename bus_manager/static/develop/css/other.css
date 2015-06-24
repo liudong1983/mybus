@@ -1,0 +1,25 @@
+label.error { 
+color: red; padding-left: 10px;
+}
+.textarea_std{
+width:400px;
+height:100px;
+}
+
+#result_div{
+border: solid 2px #94b6ca;
+height:200px;
+padding: 5px;
+overflow:auto;
+}
+
+#resourcepool_result_div{
+border: solid 2px #94b6ca;
+height:200px;
+padding: 5px;
+overflow:auto;
+}
+
+.bold_std{
+font-weight: bold;
+}
