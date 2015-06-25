@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <!-- 加入对静态文件路径的支持 -->
+        {% load static %}
+
+        <title>数据系统服务平台</title>
+        <meta name="base_title" content="Charisma测试系统" />
+        <!-- The styles -->
+        <link id="bs-css" href="{% get_static_prefix %}charisma/css/bootstrap-cerulean.css" rel="stylesheet">
+        <style type="text/css">  
+          body {
+                padding-bottom: 40px;
+          }
+          .sidebar-nav {
+                padding: 9px 0;
+          }
+        </style>
+        <link href="{% get_static_prefix %}charisma/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="{% get_static_prefix %}charisma/css/charisma-app.css" rel="stylesheet">
+        <link href="{% get_static_prefix %}charisma/css/jquery-ui-1.8.21.custom.css" rel="stylesheet">
+        <link href='{% get_static_prefix %}charisma/css/fullcalendar.css' rel='stylesheet'>
+        <link href='{% get_static_prefix %}charisma/css/fullcalendar.print.css' rel='stylesheet'  media='print'>
+        <link href='{% get_static_prefix %}charisma/css/chosen.css' rel='stylesheet'>
+        <link href='{% get_static_prefix %}charisma/css/uniform.default.css' rel='stylesheet'>
+        <link href='{% get_static_prefix %}charisma/css/colorbox.css' rel='stylesheet'>
+        <link href='{% get_static_prefix %}charisma/css/jquery.cleditor.css' rel='stylesheet'>
+        <link href='{% get_static_prefix %}charisma/css/jquery.noty.css' rel='stylesheet'>
+        <link href='{% get_static_prefix %}charisma/css/noty_theme_default.css' rel='stylesheet'>
+        <link href='{% get_static_prefix %}charisma/css/elfinder.min.css' rel='stylesheet'>
+        <link href='{% get_static_prefix %}charisma/css/elfinder.theme.css' rel='stylesheet'>
+        <link href='{% get_static_prefix %}charisma/css/jquery.iphone.toggle.css' rel='stylesheet'>
+        <link href='{% get_static_prefix %}charisma/css/opa-icons.css' rel='stylesheet'>
+        <link href='{% get_static_prefix %}charisma/css/uploadify.css' rel='stylesheet'>
+
+        <!-- easy UI -->
+        <link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/easyui/default/easyui.css"/> 
+        <!-- 
+        <link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/easyui/icon.css"/> 
+        -->
+        <!-- our own code -->
+        <link href='{% get_static_prefix %}css/other.css' rel='stylesheet'>
+
+
+
+        <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+
+        <!-- The fav icon -->
+        <link rel="shortcut icon" href="{% get_static_prefix %}charisma/img/favicon.ico">
+
+</head>
+
+<body>
+<input type="hidden" id="bus_business" value="{{ bus_business }}">
+
+<!--====================================-->
+
+<!-- content starts -->	
+	<div>
+		<ul class="breadcrumb">
+			<li>
+				<a href="/business/get_bus_business/" onclick="javascript:history.go(-1)"> 返回业务管理</a> <span class="divider">/</span>
+			</li>
+			<li>
+				{{ bus_business }} 管理
+			</li>
+		</ul>
+	</div>
+
+<!--=============================pos========begin================================================== -->
+<div class="row-fluid sortable">
+	<div class="box span12">
+		<div class="box-header well" data-original-title>
+			<h2><i class="icon-th"></i>pos 管理</h2>
+		</div>
+		
+		<div class="box-content" id="box-content">
+			<a href="/business/show_pos/{{ bus_business }}/" >  {{ bus_business }}的 pos管理</a>
+		</div>
+		
+	</div>
+</div>
+<!--=============================pos========end================================================== -->
+<!--=============================bus========begin================================================== -->
+<div class="row-fluid sortable">
+	<div class="box span12">
+		<div class="box-header well" data-original-title>
+			<h2><i class="icon-th"></i>bus 管理</h2>
+		</div>
+		
+		<div class="box-content" id="box-content">
+			<div class="span4">
+				<div class="dataTables_filter">
+					<label>
+						bus IP: <input class="input-xlarge required" type="text" id="bus_add_ip">
+					</label>
+				</div>
+			</div>
+			<div class="span4">
+				<div class="dataTables_filter">
+					<label>
+						bus port: <input class="input-xlarge required" type="text" id="bus_add_port">
+					</label>
+				</div>
+			</div>
+			<div class="span4">
+				<div class="dataTables_filter">
+					<input type="button" class="btn btn-small btn-info" onclick="add_bus()" value="新增bus">
+				</div>
+			</div>
+		</div>
+		
+		<div class="box-content" id="box-content">	
+<table class="table table-striped table-bordered bootstrap-datatable datatable">
+	<thead>
+		<tr>
+			<th>IP</th>
+			<th>Port</th>
+			<th>status</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for value in business_bus_data %}
+		<tr>
+			<td>{{ value.ip }}</td>
+			<td>{{ value.port }}</td>
+			<td>{{ value.bus_info }}</td>
+            <td>
+				<select id="cmd_bus_{{ value.ip }}_{{ value.port }}" >
+                    <option value="info">info</option>
+                    <option value="stat">info stat</option>
+                    <option value="thread">info thread</option>
+                    <option value="matchschema">info matchschema</option>
+                    <option value="source">info source</option>
+				</select>
+			<input value="查询" type="button" class="btn btn-primary" onclick="bus_info('{{ value.ip }}','{{ value.port }}')" />
+			</td>
+			<td>
+			{% ifequal value.bus_info "bus_stop"  %}
+				<input value="运行程序" type="button" class="btn btn-primary" onclick="bus_start('{{ value.ip }}','{{ value.port }}')" />
+			{% endifequal %}
+
+            {% ifequal transfer_type "full" %}
+			{% ifequal value.bus_info "INIT_OK" %}
+				<input value="开启全量" type="button" class="btn btn-primary" onclick="start_tran('{{ value.ip }}','{{ value.port }}')" />
+			{% endifequal %}
+            {% endifequal %}
+
+            {% ifequal transfer_type "incr" %}
+			{% ifequal value.bus_info "INIT_OK" %}
+				<input value="开启增量" type="button" class="btn btn-primary" onclick="start_tran('{{ value.ip }}','{{ value.port }}')" />
+			{% endifequal %}
+            {% endifequal %}
+
+			{% ifequal value.bus_info "FULL_TRAN"  %}
+				<input value="停止全量" type="button" class="btn btn-primary" onclick="stop_tran('{{ value.ip }}','{{ value.port }}')" />
+			{% endifequal %}
+			{% ifequal value.bus_info "INCR_TRAN"  %}
+				<input value="暂停增量" type="button" class="btn btn-primary" onclick="stop_tran('{{ value.ip }}','{{ value.port }}')" />
+			{% endifequal %}
+			{% ifequal value.bus_info "TRAN_FAIL"  %}
+				<input value="停止同步" type="button" class="btn btn-primary" onclick="stop_tran('{{ value.ip }}','{{ value.port }}')" />
+			{% endifequal %}
+        </td>
+            <td>
+			{% ifequal value.if_can_delete "yes"  %}
+			<input value="删除" type="button" class="btn btn-primary" onclick="delete_bus('{{ value.ip }}','{{ value.port }}')" />
+			{% endifequal %}
+            {% ifequal value.bus_info "INIT_OK" %}
+            <input value="关闭程序" type="button" class="btn btn-primary" onclick="bus_stop('{{ value.ip }}','{{ value.port }}')" />
+            {% endifequal %}
+            </td>
+			<td>
+			{% ifequal value.bus_mon "yes"  %}
+				<input value="关闭监控" type="button" class="btn btn-primary" onclick="modify_bus_mon('{{ value.ip }}','{{ value.port }}', 'no')" />
+			{% endifequal %}
+			{% ifequal value.bus_mon "no"  %}
+				<input value="打开监控" type="button" class="btn btn-primary" onclick="modify_bus_mon('{{ value.ip }}','{{ value.port }}', 'yes')"/>
+			{% endifequal %}
+			{% ifequal value.bus_mon "unknown"  %}
+				<input value="未知" type="button" class="btn btn-primary"/>
+			{% endifequal %}
+			</td>
+            <td>
+			    <input value="查看日志" type="button" class="btn btn-primary" onclick="view_log('{{ value.ip }}','{{ value.port }}')" />
+            </td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>			
+		</div>
+	</div>
+</div>
+<!--=============================bus========end================================================== -->
+<!--==================src======begin============-->	
+<div class="row-fluid sortable">
+	<div class="box span12">
+		<div class="box-header well" data-original-title>
+			<h2><i class="icon-th"></i> 上游数据源 管理</h2>
+		</div>
+		<div class="box-content" id="box-content">
+			<div class="span4">
+				<div class="dataTables_filter">
+					<label>
+						上游数据源IP: <input type="text" id="src_add_ip">
+					</label>
+				</div>
+			</div>
+			<div class="span4">
+				<div class="dataTables_filter">
+					<label>
+						起始端口: <input type="text" class="input-xlarge required" id="src_add_port_start">
+					</label>
+				</div>
+				<div class="dataTables_filter">
+					<label>
+						结束端口: <input type="text" class="input-xlarge required" id="src_add_port_end">
+					</label>
+				</div>
+			</div>
+			<div class="span4">
+				<div class="dataTables_filter">
+					<!--button type="button" class="btn btn-small btn-info" id="search_btn">检索</button-->
+					<input type="button" class="btn btn-small btn-info" onclick="add_src()" value="添加上游数据源">
+				</div>
+			</div>
+		</div>
+
+		<div class="box-content" id="box-content">	
+<table class="table table-striped table-bordered bootstrap-datatable datatable">
+	<thead>
+		<tr>
+			<th>IP</th>
+			<th>Port</th>
+			<th>对应任务</th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for src_value in business_src_data %}
+		<tr>
+			<td>{{ src_value.ip }}</td>
+			<td>{{ src_value.port }}</td>
+			<td>
+				<select id="assign_ds_{{ src_value.ip }}_{{ src_value.port }}" >
+					<option value="free">---free---</option>
+				{% for bus_value in business_bus_data %}
+					{% ifequal src_value.task bus_value.bus_item %}
+						<option value="{{bus_value.ip}}:{{bus_value.port}}" selected="selected">{{bus_value.ip}}:{{bus_value.port}}</option>
+					{% else %}
+						<option value="{{bus_value.ip}}:{{bus_value.port}}">{{bus_value.ip}}:{{bus_value.port}}</option>
+					{% endifequal %}
+				{% endfor%}
+				</select>
+			</td>
+			<td>
+				<input value="修改任务" type="button" class="btn btn-primary" onclick="add_task_src_one_business('{{ src_value.ip }}','{{ src_value.port }}')" />
+			</td>
+			<td>
+				<input value="删除" type="button" class="btn btn-primary" onclick="delete_src('{{ src_value.ip }}','{{ src_value.port }}')" />
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>			
+		</div>
+	</div>
+</div>
+<!--=============================target count begin================================================== -->
+<div class="row-fluid sortable">
+	<div class="box span12">
+		<div class="box-header well" data-original-title>
+			<h2><i class="icon-th"></i>下游数量 管理</h2>
+		</div>
+		<div>
+			数据源个数:
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input class="input-xlarge required" type="text" id="target_count" value="{{target_count}}" >
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="button" class="btn btn-small btn-info" onclick="modify_target_count()" value="修改下游数据源个数">
+		</div>
+		<div class="box-content" id="box-content">				
+		</div>
+	</div>
+</div>
+<!--=============================target count end================================================== -->
+<div class="row-fluid sortable">
+<div class="box span12">
+		<div class="box-header well" data-original-title>
+			<h2><i class="icon-th"></i>下游数据源 管理</h2>
+		</div>
+	<div class="box-content" id="box-content">	
+	<table class="table table-striped table-bordered bootstrap-datatable datatable">
+	<thead>
+		<tr>
+			<th>切片号</th>
+			<th>IP</th>
+			<th>Port</th>
+			<th>是否在线</th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+		<td><input class="input-xlarge required" type="text" id="target_add_num"></td>
+		<td><input class="input-xlarge required" type="text" id="target_add_ip"></td>
+        <td>
+			<div class="dataTables_filter">
+                <label>起始:<input type="text" id="target_add_port_start"></label>
+                <label>结束:<input type="text" id="target_add_port_end"></lable>
+            </div>
+        </td>
+		<td>
+			<select id="target_add_online" >
+                                <option value="yes">yes</option>
+                                <option value="no">no</option>
+                        </select>
+		</td>
+		<td><input type="button" class="btn btn-small btn-info" onclick="add_target()" value="添加下游数据源"></td>
+		</tr>
+		{% for value in business_target_data %}
+		<tr>
+			<td>
+				<div class="box-content" id="box-content">
+					<div class="span4">
+						<div class="dataTables_filter">
+							<input  type="text" value="{{ value.partnum }}" style="width:200px" id="dist_partnum_{{ value.ip }}_{{ value.port }}"/>
+						</div>
+					</div>
+				</div>
+			</td>
+			<td>
+				<div class="box-content" id="box-content">
+					<div class="span4">
+						<div class="dataTables_filter">
+							{{ value.ip }}
+						</div>
+					</div>
+				</div>
+			</td>
+			<td>
+				<div class="box-content" id="box-content">
+					<div class="span4">
+						<div class="dataTables_filter">
+							{{ value.port }}
+						</div>
+					</div>
+				</div>
+			</td>
+			<td>
+				<div class="box-content" id="box-content">
+					<div class="span4">
+						<div class="dataTables_filter">
+							<label>
+								<select id="dist_online_status_{{ value.ip }}_{{ value.port }}" style="width:60px">
+									<option value="0">-请选择-</option>
+									<option value="yes" {% ifequal value.status "yes"  %} selected {% endifequal %}>yes</option>
+									<option value="no"  {% ifequal value.status "no"   %} selected {% endifequal %}>no</option>
+								</select>
+							</label>
+						</div>
+					</div>
+				</div>
+				
+			</td>
+			<td>
+				<div class="box-content" id="box-content">
+					<div class="span4">
+						<div class="dataTables_filter">
+							<input value="修改状态" type="button" class="btn btn-primary" onclick="update_target('{{ value.ip }}','{{ value.port }}')" />
+						</div>
+					</div>
+				</div>
+			</td>
+			<td>
+				<div class="box-content" id="box-content">
+						<div class="span4">
+							<div class="dataTables_filter">
+								<input value="删除" type="button" class="btn btn-primary" onclick="delete_target('{{ value.ip }}','{{ value.port }}')" />
+							</div>
+						</div>
+				</div>
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+	</table>			
+	</div>
+</div>
+</div>
+<!--=============================user========begin================================================== -->
+<div class="row-fluid sortable">
+	<div class="box span12">
+		<div class="box-header well" data-original-title>
+			<h2><i class="icon-th"></i>用户 管理</h2>
+		</div>
+		<div>
+			用户名: <input class="input-xlarge required" type="text" id="bus_username" value="{{user_data.username}}">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;密码:
+			<input class="input-xlarge required" type="text" id="bus_password" value="{{user_data.password}}">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="button" class="btn btn-small btn-info" class="btn btn-primary" onclick="modify_bus_user()" value="修改用户和密码">
+		</div>
+		<div class="box-content" id="box-content">				
+		</div>
+	</div>
+</div>
+<!--=============================user========end================================================== -->
+<!--=============================transfer_type========begin================================================== -->
+<div class="row-fluid sortable">
+	<div class="box span12">
+		<div class="box-header well" data-original-title>
+			<h2><i class="icon-th"></i>传输类型 管理</h2>
+		</div>
+		<div>
+			传输类型: <select id="transfer_type" >
+						<option value="0">---请选择--</option>
+						<option value="full" {% ifequal transfer_type "full"  %} selected {% endifequal %}>全量</option>
+						<option value="incr" {% ifequal transfer_type "incr"  %} selected {% endifequal %}>增量</option>
+					</select>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="button" class="btn btn-small btn-info" class="btn btn-primary" onclick="modify_transfer_type()" value="修改传输类型">
+		</div>
+		<div class="box-content" id="box-content">				
+		</div>
+	</div>
+</div>
+<!--=============================charset========begin================================================== -->
+<div class="row-fluid sortable">
+	<div class="box span12">
+		<div class="box-header well" data-original-title>
+			<h2><i class="icon-th"></i>字符集类型 管理</h2>
+		</div>
+		<div>
+			字符集类型: <select id="charset_type" >
+						<option value="0" >----请选择---</option>
+						<option value="utf8" {% ifequal charset_type "utf8"  %} selected {% endifequal %}>utf8</option>
+						<option value="gbk" {% ifequal charset_type "gbk"  %} selected {% endifequal %}>gbk</option>
+						<option value="latin1" {% ifequal charset_type "latin1"  %} selected {% endifequal %}>latin1</option>
+					</select>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="button" class="btn btn-small btn-info" class="btn btn-small btn-info" onclick="modify_charset_type()" value="修改字符集类型">
+		</div>
+		<div class="box-content" id="box-content">				
+		</div>
+	</div>
+</div>
+<!--=============================storage type========begin================================================== -->
+<div class="row-fluid sortable">
+	<div class="box span12">
+		<div class="box-header well" data-original-title>
+			<h2><i class="icon-th"></i>上下游的存储类型 管理</h2>
+		</div>
+		<div>
+			上游的存储类型: <select id="source_type" >
+						<option value="0" >----请选择---</option>
+						<option value="mysql" {% ifequal source_type "mysql"  %} selected {% endifequal %}>mysql</option>
+					</select>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			下游的存储类型: <select id="target_type" >
+				<option value="0" >----请选择---</option>
+				<option value="redis" {% ifequal target_type "redis"  %} selected {% endifequal %}>redis</option>
+                <option value="rediscounter" {% ifequal target_type "rediscounter"  %} selected {% endifequal %}>rediscounter</option>
+                <option value="hbase" {% ifequal target_type "hbase"  %} selected {% endifequal %}>hbase</option>
+			</select>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="button" class="btn btn-small btn-info" class="btn btn-small btn-info" onclick="modify_source_target_type()" value="修改存储类型">
+		</div>
+		<div class="box-content" id="box-content">				
+		</div>
+	</div>
+</div>
+<!----------------------------------begin --------------------------------------------------------------->
+<div class="row-fluid sortable">
+    <div class="box span12">
+		<div class="box-header well" data-original-title>
+			<h2><i class="icon-th"></i>数据源table管理</h2>
+		</div>
+    </div>
+	<div class="box-content" id="box-content">	
+	<table class="table table-striped table-bordered bootstrap-datatable datatable">
+	<thead>
+		<tr>
+			<th>表ID(用于so)</th>
+			<th>库名</th>
+			<th>表名</th>
+            <th>列名</th>
+            <th>统计开关</th>
+            <th></th>
+		</tr>
+	</thead>
+    <tbody>
+		<tr>
+		<td><input class="input-xlarge required" type="text" id="schema_add_id"></td>
+		<td><input class="input-xlarge required" type="text" id="schema_add_dbname"></td>
+		<td><input class="input-xlarge required" type="text" id="schema_add_tbname"></td>
+		<td><input class="input-xlarge required" type="text" id="schema_add_column"></td>
+        <td>
+            <select id="schema_add_stat">
+				<option value="yes" selected>yes</option>
+                <option value="no">no</option>
+            </select>
+        </td>
+        <td><input type="button" class="btn btn-small btn-info" onclick="add_schema()" value="添加"></td>
+        <td></td>
+        </tr>
+        {% for schema in all_schema %}
+		<tr>
+            <td>{{ schema.tbid }}</td>
+            <td><input class="input-xlarge required" type="text" id="schema_update_dbname_{{ schema.tbid }}" value="{{ schema.dbname }}"></td>
+            <td><input class="input-xlarge required" type="text" id="schema_update_tbname_{{ schema.tbid }}" value="{{ schema.tbname }}"></td>
+            <td><input class="input-xlarge required" type="text" id="schema_update_column_{{ schema.tbid }}" value="{{ schema.column }}"></td>
+            <td>
+                <select id="schema_update_stat_{{ schema.tbid }}">
+                    <option value="yes" {% ifequal schema.stat "yes"  %} selected {% endifequal %}>yes</option>
+                    <option value="no" {% ifequal  schema.stat "no"  %} selected {% endifequal %}>no</option>
+                </select>
+            </td>
+            <td><input type="button" class="btn btn-primary" onclick="update_schema('{{ schema.tbid }}')" value="修改"></td>
+            <td><input type="button" class="btn btn-primary" onclick="remove_schema('{{ schema.tbid }}')" value="删除"></td>
+    </tr>
+    {% endfor %}
+	</tbody>
+	</table>			
+	</div>
+</div>
+<!-----------------------------------------------------begin--------------------------------------------------------->
+<div class="row-fluid sortable">
+	<div class="box span12">
+		<div class="box-header well" data-original-title>
+			<h2><i class="icon-th"></i>全量快照检查</h2>
+		</div>
+		<div>
+			检查开关: <select id="check_snapshot" >
+						<option value="0">---请选择--</option>
+						<option value="true" {% ifequal snap_check "true"  %} selected {% endifequal %}>打开</option>
+						<option value="false" {% ifequal snap_check "false"  %} selected {% endifequal %}>关闭</option>
+					</select>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="button" class="btn btn-small btn-info" class="btn btn-primary" onclick="modify_check_snapshot()" value="修改">
+		</div>
+		<div class="box-content" id="box-content">				
+		</div>
+	</div>
+</div>
+<!-----------------------------------------------------begin--------------------------------------------------------->
+{% ifequal target_type "hbase" %}
+<div class="row-fluid sortable">
+	<div class="box span12">
+		<div class="box-header well" data-original-title>
+			<h2><i class="icon-th"></i>hbase全量线程数目</h2>
+		</div>
+		<div>
+            线程数目: <input class="input-xlarge required" type="text" id="hbase_full_thread_num" value="{{hbase_thread_num}}">
+			<input type="button" class="btn btn-small btn-info" class="btn btn-primary" onclick="modify_hbase_full_thread_num()" value="修改线程数目">
+		</div>
+		<div class="box-content" id="box-content">				
+		</div>
+	</div>
+</div>
+{% endifequal %}
+
+
+<script src="{% get_static_prefix %}charisma/js/jquery-1.7.2.min.js"></script>
+<script src="{% get_static_prefix %}charisma/js/jquery-ui-1.8.21.custom.min.js"></script>
+<script language="JavaScript" type="text/javascript">
+	$(document).ready(function() {
+	});;   
+	//int
+	function isInteger(thisvalue){
+		if(thisvalue <0  ||  thisvalue!=parseInt(thisvalue) ){
+	       		return false
+		}else{
+				return true;
+		}
+    }
+    function modify_hbase_full_thread_num() {
+		var business=$("#bus_business").val();
+        var thread_num=$("#hbase_full_thread_num").val();
+        if (!isInteger(thread_num)) {
+            alert("thread_num=" + thread_num + " is not integer");
+            return;
+        }
+		$.ajax({
+			 type: "GET",
+			 url: "/business/modify_hbase_full_thread_num/?business="+business+"&thread_num="+thread_num,
+			 success: function(data){
+			     if(data="ok"){
+			     	alert("修改数据成功");
+			 	 }else{
+			 	 	alert("修改数据失败,请联系管理员,error:"+data);
+			 	 } 
+			     location.reload();
+			 },
+			 error:function(){
+			 	alert("delete_src error, 请联系管理员");
+			 }
+        });
+    }
+    function modify_check_snapshot() {
+        var snap_check = $("#check_snapshot").val();
+		if(snap_check == 0){
+			alert("请选择快照检查");
+			return false;
+		}
+		var business=$("#bus_business").val();
+		$.ajax({
+             type: "GET",
+             url: "/business/modify_check_snapshot/?business="+business+"&snap_check="+snap_check,
+             success: function(data){
+             	 if(data=="ok"){
+             	 	alert("修改数据成功");
+                 	location.reload();
+             	 }else{
+             	 	alert("添加数据失败,error:"+data);
+                 	location.reload();
+             	 }
+             },
+             error:function(){
+             	alert("modify_source_target_type.... error, 请联系管理员");
+             }
+         });	
+    }
+	function modify_target_count(){
+		var business=$("#bus_business").val();
+		var target_count=$("#target_count").val();
+        if (!isInteger(target_count)) {
+            alert("target count=" + target_count + " is not integer");
+            return;
+        }
+		$.ajax({
+			 type: "GET",
+			 url: "/business/set_target_count/?business="+business+"&target_count="+target_count,
+			 success: function(data){
+			     if(data="ok"){
+			     	alert("修改数据成功");
+			 	 }else{
+			 	 	alert("修改数据失败,请联系管理员,error:"+data);
+			 	 } 
+			     location.reload();
+			 },
+			 error:function(){
+			 	alert("delete_src error, 请联系管理员");
+			 }
+        });
+	}
+	function delete_src(ip, port){
+		var business=$("#bus_business").val();
+		if(confirm("你确定要删除这个数据源吗?"))
+		{
+			$.ajax({
+				 type: "GET",
+				 url: "/business/delete_src/?business="+business+"&ip="+ip+"&port="+port,
+				 success: function(data){
+				     if(data="ok"){
+				     	alert("删除数据成功");
+				 	 }else{
+				 	 	alert("删除数据失败,请联系管理员,error:"+data);
+				 	 } 
+				     location.reload();
+				 },
+				 error:function(data){
+				 	alert("delete_src error:" + data);
+				 }
+            });
+		}else{
+			return false;
+		}
+    }
+function remove_schema(schema_id) {
+    if (schema_id == "") {
+        alert("update schema info不能为空");
+        return false;
+    }
+	var business=$("#bus_business").val();
+	$.ajax({
+         type: "GET",
+         url: "/business/remove_schema/?business=" + business + "&tbid=" + schema_id,
+         success: function(data){
+             if(data == "ok"){
+         	 	alert("删除数据成功");
+                } else if (data == "noexist"){
+                alert("数据不存在,无法删除");
+                return false;
+                } else {
+                alert("删除数据失败,error:"+data);
+                return false;
+         	 }
+             location.reload();
+         },
+         error:function(){
+         	alert("error:" + data);
+         }
+     });	
+}
+function update_schema(schema_id) {
+    var schema_dbname = $("#schema_update_dbname_" + schema_id).val();
+    var schema_tbname = $("#schema_update_tbname_" + schema_id).val();
+    var schema_column = $("#schema_update_column_" + schema_id).val();
+    var schema_stat = $("#schema_update_stat_" + schema_id).val();
+    
+    if (schema_id == "" ||
+            schema_dbname == "" ||
+            schema_tbname == "" ||
+            schema_column == "" ||
+            schema_stat == "") {
+        alert("update schema info不能为空");
+        return false;
+    }
+	var business=$("#bus_business").val();
+    var jsond = jQuery.param({"business": business, "dbname" : schema_dbname, "tbname" : schema_tbname, "column" : schema_column, "tbid" : schema_id, "stat" : schema_stat});
+	$.ajax({
+         type: "POST",
+         url: "/business/update_schema/",
+         data: jsond,
+         dataType: "json",
+         success: function(data){
+             if(data.result == "ok"){
+         	 	alert("修改数据成功");
+                } else if (data.result == "noexist"){
+                alert("数据不存在,无法修改");
+                return false;
+                } else {
+                alert("修改数据失败,error:"+data.result);
+                return false;
+         	 }
+             location.reload();
+         },
+         error:function(){
+         	alert("error");
+         }
+     });	
+}
+function add_schema() {
+    var schema_id = $("#schema_add_id").val();
+    var schema_dbname = $("#schema_add_dbname").val();
+    var schema_tbname = $("#schema_add_tbname").val();
+    var schema_column = $("#schema_add_column").val();
+    var schema_stat = $("#schema_add_stat").val();
+    
+    if (schema_id == "" ||
+            schema_dbname == "" ||
+            schema_tbname == "" ||
+            schema_column == "" ||
+            schema_stat == "") {
+        alert("add schema info不能为空");
+        return false;
+    }
+    if (!isInteger(schema_id)) {
+        alert("schema id必须为整数");
+        return false;
+    }
+    var business=$("#bus_business").val();
+    var jsond = jQuery.param({"business": business, 
+            "dbname" : schema_dbname, 
+            "tbname" : schema_tbname, 
+            "column" : schema_column, 
+            "tbid" : schema_id, 
+            "stat" : schema_stat});
+	$.ajax({
+         type: "POST",
+         url: "/business/add_schema/",
+         data: jsond,
+         dataType: "json",
+         success: function(data){
+             if(data.result == "ok"){
+         	 	alert("添加数据成功");
+                } else if (data.result == "exist"){
+                alert("数据已经存在");
+                return false;
+                } else {
+                alert("添加数据失败,error:"+data.result);
+                return false;
+         	 }
+             location.reload();
+         },
+         error:function(){
+         	alert("error");
+         }
+     });	
+}
+	function add_src(){
+		var ip=$("#src_add_ip").val();
+		ip=ip.replace(/\s+/g,"");
+		ip=ip.replace(/:/g,"_");
+		if(ip==""){
+			alert("ip不能为空");
+			return false;
+		}
+        var start_port=$("#src_add_port_start").val();
+		if(start_port==''){
+			alert("请设置port");
+			return false;
+		}
+		if(!isInteger(start_port)){
+			alert("请设置起始端口为正整数");
+			return false;
+		}
+		var end_port=$("#src_add_port_end").val();
+        if(end_port==''){
+            end_port = "0";
+		}
+		if(!isInteger(end_port)){
+			alert("请设置终止端口为正整数");
+			return false;
+		}
+		var business=$("#bus_business").val();
+		$.ajax({
+             type: "GET",
+             url: "/business/add_src/?business="+business+"&ip="+ip+"&start_port="+start_port+"&end_port="+end_port,
+             success: function(data){
+                 if(data=="ok"){
+             	 	alert("添加数据成功");
+             	 }else if(data == "exist"){
+             	 	alert("添加数据失败,数据已经存在");
+             	 }else{
+             	 	alert("添加数据失败,error:"+data);
+             	 }
+                 location.reload();
+             },
+             error:function(){
+             	alert("error:" + data);
+             }
+         });	
+	}
+	function delete_target(ip,port){
+		var business=$("#bus_business").val();
+		if(confirm("你确定要删除这个下游数据源吗?"))
+		{
+			$.ajax({
+	             type: "GET",
+	             url: "/business/delete_target/?business="+business+"&ip="+ip+"&port="+port,
+	             success: function(data){
+	                 if(data="ok"){
+	                 	alert("删除数据成功");
+	             	 }else{
+	             	 	alert("删除数据失败");
+	             	 } 
+	                 location.reload();
+	             },
+	             error:function(){
+	             	alert("delete_target error, 请联系管理员");
+	             }
+	         });
+         }else{
+         	return false;
+         }
+	}
+	function update_target(ip,port){
+		var business=$("#bus_business").val();
+		var online_name="dist_online_status_"+ip+"_"+port;
+		var partnum_name = "dist_partnum_" + ip + "_" + port;
+		var online= document.getElementById(online_name).value;
+		var partnum= document.getElementById(partnum_name).value;
+		partnum=partnum.replace(/\s+/g,"");
+		partnum=partnum.replace(/:/g,"_");
+		if(partnum==""){
+			alert("partnum不能为空");
+			return false;
+		}
+		if (online == 0){
+			alert("online不能为空");
+			return false;
+		}
+		if(!isInteger(port)){
+			alert("请设置端口为正整数");
+			return false;
+		}
+		if(!confirm("你确定要修改这个下游数据源吗?")){
+			return false;
+		}
+		$.ajax({
+		    type: "GET",
+		    url: "/business/update_target/?business="+business+"&ip="+ip+"&port="+port+"&online="+online+"&partnum="+partnum,
+		    success: function(data){
+		        if(data=="ok"){
+		        	alert("修改数据成功");
+		    	 } else {
+		    	 	alert("修改数据失败");
+		    	 } 
+		        location.reload();
+		    },
+		    error:function(){
+		    	alert("update_target_online error, 请联系管理员");
+		    }
+		});
+	   }	
+	function add_target(){
+		var ip=$("#target_add_ip").val();
+		ip=ip.replace(/\s+/g,"");
+		if(ip==''){
+			alert("请设置ip");
+			return false;
+		}
+		ip=ip.replace(/\s+/g,"");
+		ip=ip.replace(/:/g,"_");
+		var start_port=$("#target_add_port_start").val();
+		if(start_port==''){
+			alert("请设置port");
+			return false;
+		}
+		if(!isInteger(start_port)){
+			alert("请设置端口为正整数");
+			return false;
+		}
+		var end_port=$("#target_add_port_end").val();
+        if(end_port==''){
+            end_port = '0';
+		}
+		if(!isInteger(end_port)){
+			alert("请设置端口为正整数");
+			return false;
+		}
+		var part_num=$("#target_add_num").val();
+		if(!isInteger(part_num)){
+			alert("请设置part_num为正整数");
+			return false;
+		}
+		var online=$("#target_add_online").val();
+		var business=$("#bus_business").val();
+		
+		$.ajax({
+             type: "GET",
+             url: "/business/add_target/?business="+business+"&ip="+ip+"&start_port="+start_port+"&end_port="+end_port+"&part_num="+part_num+"&online="+online,
+             success: function(data){
+                 if(data=="ok"){
+             	 	alert("添加数据成功");
+             	 }else if(data=="exist"){
+             	 	alert("添加数据失败,数据已经存在");
+             	 }else{
+             	 	alert("添加数据失败,error:"+data);
+             	 }
+                 location.reload();
+             },
+             error:function(){
+             	alert("add_target.... error, 请联系管理员");
+             }
+         });	
+	}
+
+	function update_ip_dist(ip,port,part_num){
+		var business=$("#bus_business").val();
+		var dist_ip_id="dist_ip_"+ip+"_"+port;
+		var dist_ip= document.getElementById(dist_ip_id).value;
+		dist_ip=dist_ip.replace(/\s+/g,"");
+		dist_ip=dist_ip.replace(/:/g,"_");
+		
+		var online_name="dist_online_status_"+ip+"_"+port;
+		var online= document.getElementById(online_name).value;
+		if(confirm("你确定要修改这个下游数据源ip吗?"))
+		{
+			$.ajax({
+	             type: "GET",
+	             url: "/business/update_ip_dist/?business="+business+"&ip="+ip+"&port="+port+"&dist_ip="+dist_ip+"&part_num="+part_num+"&online="+online,
+	             success: function(data){
+	                 if(data="ok"){
+	                 	alert("修改数据成功");
+	             	 }else{
+	             	 	alert("修改数据失败");
+	             	 } 
+	                 location.reload();
+	             },
+	             error:function(){
+	             	alert("update_ip_dist error, 请联系管理员");
+	             }
+	         });
+         }else{
+         	return false;
+         }
+	}
+	function update_port_dist(ip,port,part_num){
+		
+		var business=$("#bus_business").val();
+		var dist_port__id="dist_port_"+ip+"_"+port;
+		var dist_port= document.getElementById(dist_port__id).value;
+		if(!isInteger(dist_port)){
+			alert("请设置端口为正整数");
+			return false;
+		}
+		dist_port=dist_port.replace(/\s+/g,"");
+		dist_port=dist_port.replace(/:/g,"_");
+		var online_name="dist_online_status_"+ip+"_"+port;
+		var online= document.getElementById(online_name).value;
+		if(confirm("你确定要修改这个下游数据源port吗?"))
+		{
+			$.ajax({
+	             type: "GET",
+	             url: "/business/update_port_dist/?business="+business+"&ip="+ip+"&port="+port+"&dist_port="+dist_port+"&part_num="+part_num+"&online="+online,
+	             success: function(data){
+	                 if(data="ok"){
+	                 	alert("修改数据成功");
+	             	 }else{
+	             	 	alert("修改数据失败");
+	             	 } 
+	                 location.reload();
+	             },
+	             error:function(){
+	             	alert("update_port_dist error, 请联系管理员");
+	             }
+	         });
+         }else{
+         	return false;
+         }
+	}
+/*--------------------------target----------end--------	*/
+
+/*--------------------------bus----------begin--------	*/
+	function delete_bus(ip,port){
+		if(confirm("你确定要删除这个bus吗,也会删除这个bus对应的所有task?"))
+		{
+			var business=$("#bus_business").val();
+			$.ajax({
+	             type: "GET",
+	             url: "/business/delete_bus/?business="+business+"&ip="+ip+"&port="+port+"",
+	             success: function(data){
+	                 if(data="ok"){
+	                 	alert("删除数据成功");
+	             	 }else{
+	             	 	alert("删除数据失败");
+	             	 } 
+	                 location.reload();
+	             },
+	             error:function(){
+	             	alert("delete_bus error, 请联系管理员");
+	             }
+	         });
+	     }else
+	     {
+	     	return false;
+	     }	
+	}
+	function add_bus(){
+		var ip=$("#bus_add_ip").val();
+		ip=ip.replace(/\s+/g,"");
+		ip=ip.replace(/:/g,"_");
+		if(ip==""){
+			alert("ip不能为空");
+			return false;
+		}
+		var port=$("#bus_add_port").val();
+		if(!isInteger(port)){
+			alert("请设置端口为正整数");
+			return false;
+		}
+		var business=$("#bus_business").val();
+		$.ajax({
+             type: "GET",
+             url: "/business/add_bus/?business="+business+"&ip="+ip+"&port="+port+"",
+             success: function(data){
+                 if(data=="ok"){
+             	 	alert("添加数据成功");
+             	 }else if(data=="exist"){
+             	 	alert("添加数据失败,数据已经存在");
+             	 }else{
+             	 	alert("添加数据失败,请联系管理员,error:"+data);
+             	 }
+                 location.reload();
+             },
+             error:function(){
+             	alert("add_bus.... error, 请联系管理员");
+             }
+         });	
+	}
+	function modify_bus_user(){
+		var user=$("#bus_username").val();
+		var pass=$("#bus_password").val();
+		var business=$("#bus_business").val();
+		$.ajax({
+             type: "GET",
+             url: "/business/modify_bus_user/?business="+business+"&user="+user+"&pass="+pass+"",
+             success: function(data){
+		if (data == "ok") {
+			alert("修改成功");
+                 	location.reload();
+		} else {
+                 	alert("修改失败, error:" + data);
+                 	location.reload();
+		}
+             },
+             error:function(){
+             	alert("modify_bus_user.... error, 请联系管理员");
+             }
+         });	
+	}
+	function modify_transfer_type(){
+		var transfer_type=$("#transfer_type").val();
+		if(transfer_type==0){
+			alert("请选择type");
+			return false;
+		}
+		var business=$("#bus_business").val();
+		$.ajax({
+             type: "GET",
+             url: "/business/modify_transfer_type/?business="+business+"&transfer_type="+transfer_type,
+             success: function(data){
+		if (data == "ok") {
+			alert("修改成功")
+                 	location.reload();
+		} else {
+			alert("修改失败,error:" + data);
+			location.reload();
+		}
+             },
+             error:function(){
+             	alert("modify_transfer_type.... error, 请联系管理员");
+             }
+         });	
+	}
+	function view_log(ip,port){
+		var business=$("#bus_business").val();
+		$.ajax({
+             type: "GET",
+             url: "/business/view_log/?business="+business+"&ip="+ip+"&port="+port,
+             success: function(data){
+			alert(data);
+			location.reload();
+		},
+             error:function(){
+             	alert("查看日志失败, 请联系管理员");
+             }
+	});
+	}
+	function bus_start(ip,port){
+		var business=$("#bus_business").val();
+		$.ajax({
+             type: "GET",
+             url: "/business/bus_start/?business="+business+"&ip="+ip+"&port="+port,
+             success: function(data){
+		if (data == "ok") {
+			alert("启动程序成功");
+			location.reload();
+		} else {
+			alert("启动程序失败, error:" + data);
+			location.reload();
+		}
+             },
+             error:function(){
+             	alert("启动程序失败, 请联系管理员");
+             }
+         });	
+	}
+	function bus_stop(ip, port){
+		var business=$("#bus_business").val();
+		$.ajax({
+             type: "GET",
+             url: "/business/bus_stop/?business=" + business + "&ip=" + ip + "&port=" + port,
+             success: function(data){
+		if (data == "ok") {
+			alert("关闭程序成功");
+			location.reload();
+		} else {
+			alert("关闭程序失败, error:" + data);
+			location.reload();
+		}
+             },
+             error:function(){
+             	alert("关闭程序失败, 请联系管理员");
+             }
+         });	
+	}
+	function start_tran(ip,port){
+		var business=$("#bus_business").val();
+		$.ajax({
+             type: "GET",
+             url: "/business/start_tran/?business="+business+"&ip="+ip+"&port="+port,
+             success: function(data){
+		if (data == "ok") {
+			alert("启动同步成功");
+			location.reload();
+		} else {
+			alert("启动同步失败, error:" + data);
+			location.reload();
+		}
+             },
+             error:function(){
+             	alert("bus_start.... error, 请联系管理员");
+             }
+         });	
+	}
+	function stop_tran(ip,port){
+		var business=$("#bus_business").val();
+		$.ajax({
+             type: "GET",
+             url: "/business/stop_tran/?business="+business+"&ip="+ip+"&port="+port,
+             success: function(data){
+             if (data == "ok") {
+                alert("停止同步成功");
+             } else {
+                alert("停止同步失败, error:" + data);
+             }
+			    location.reload();
+             },
+             error:function(){
+             	alert("停止同步失败...., 请联系管理员");
+             }
+         });	
+	}
+	function bus_info(ip,port){
+		var business=$("#bus_business").val();
+        var cur_cmd = document.getElementById("cmd_bus_"+ip+"_"+port).value;
+		$.ajax({
+             type: "GET",
+             url: "/business/bus_info/?business="+business+"&ip="+ip+"&port="+port+"&cmd="+cur_cmd,
+             success: function(data){
+                 alert(data);
+             },
+             error:function(){
+             	alert("bus_info.... error, 请联系管理员");
+             }
+         });	
+	}
+	function modify_charset_type(){
+		var charset_type=$("#charset_type").val();
+		if(charset_type!=0){
+			var business=$("#bus_business").val();
+			$.ajax({
+				type: "GET",
+				url: "/business/modify_charset_type/?business="+business+"&charset_type="+charset_type,
+				success: function(data){
+					if (data == "ok") {
+				     		alert("修改成功");
+				     		location.reload();
+					} else {
+						alert("修改失败, error:" + data)
+				     		location.reload();
+					}
+				},
+				error:function(){
+				 	alert("modify_charset_type.... error, 请联系管理员");
+				}
+         	});
+		}else{
+			alert("请选择字符集!");
+		}
+			
+	}
+	function add_task_src_one_business(ip,port){
+		var business=$("#bus_business").val();
+		var cur_src = ip + ":" + port;
+		var cur_bus = document.getElementById("assign_ds_"+ip+"_"+port).value;
+		$.ajax({
+             type: "GET",
+             url: "/business/add_task_src/?business="+business+"&src=" + cur_src + "&bus=" + cur_bus,
+             success: function(data){
+             	 if(data=="ok"){
+             	 	alert("添加数据成功");
+             	 }else if(data=="strict"){
+             	 	alert("添加数据失败,数据已经存在");
+             	 }else{
+             	 	alert("添加数据失败,请联系管理员,error:"+data);
+             	 }
+                 location.reload();
+             },
+             error:function(){
+             	alert("add_task_src_one_business.... error, 请联系管理员");
+             }
+         });	
+	}
+	function modify_source_target_type(){
+		var source_type = $("#source_type").val();
+		if(source_type==0){
+			alert("请选择上游数据源类型");
+			return false;
+		}
+		var target_type = $("#target_type").val();
+		if(target_type==0){
+			alert("请选择下游数据源类型");
+			return false;
+		}
+		var business=$("#bus_business").val();
+		$.ajax({
+             type: "GET",
+             url: "/business/modify_source_target_type/?business="+business+"&target_type="+target_type+"&source_type="+source_type,
+             success: function(data){
+             	 if(data=="ok"){
+             	 	alert("修改数据成功");
+                 	location.reload();
+             	 }else{
+             	 	alert("添加数据失败,error:"+data);
+                 	location.reload();
+             	 }
+             },
+             error:function(){
+             	alert("modify_source_target_type.... error, 请联系管理员");
+             }
+         });	
+	}
+	function modify_bus_mon(busip, busport, monvalue){
+		var business=$("#bus_business").val();
+		$.ajax({
+             type: "GET",
+             url: "/business/modify_bus_mon/?business="+business+"&bus_ip="+busip+"&bus_port="+busport+"&monvalue="+monvalue,
+             success: function(data){
+             	 if(data=="ok"){
+             	 	alert("设定数据成功");
+                 	location.reload();
+             	 }else{
+             	 	alert("设定失败,error:"+data);
+                 	location.reload();
+             	 }
+             },
+             error:function(){
+             	alert("modify_source_target_type.... error, 请联系管理员");
+             }
+         });	
+	}
+/*---------------modify_source_target_typeend---------------------------*/
+
+</script>
+
+</body>
+</html>
