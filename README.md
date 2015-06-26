@@ -14,32 +14,37 @@
 2. redis官网下载redis随便一个版本, 安装，并运行，得到redis_ip, redis_port  
 3. 进入bus_manager/business目录，修改views.py文件,填入具体的redis_ip, redis_port
 4. 然后返回bus_manger目录，执行nohup python manage.py runserver 0.0.0.0:8888 &   
+    
+    
 
-二. 配置msg_test模拟业务
-1. 打开浏览器，执行http://host:8888, 打开configservice页面   
+二. 配置msg_test模拟业务   
+1. 打开浏览器，执行http://host:8888, 打开configservice页面      
 2. 添加业务msg_test  
 3. 配置msg_test,配置较为复杂，后面会详细介绍，字符集转换慎用，最好下游和上游数据集一致   
-4. 配置schema的时候，db和table的名字请用正则表达式，对于列，请采用c1#c2#c3的形式，统计开关，用来确定这个表的数据是否要统计
+4. 配置schema的时候，db和table的名字请用正则表达式，对于列，请采用c1#c2#c3的形式，统计开关，用来确定这个表的数据是否要统计    
 
-三. 编译转换插件
-1. 进入myso/msg 目录下，执行make命令，生成libprocess.so   
-2. 进入src目录，执行mkdir msg && cp -ap ../myso/msg/libprocess.so  msg
-3. 进入src目录，执行/usr/local/databus/bus -x msg_test -p 18889 -m 127.0.0.1:9999
-4. 
-四. 建立上游数据库
-1. 启动mysql数据库，建立要导出的heart_beat表
 
-五. 建立下游数据库
-1. 启动redis数据库
+三. 编译转换插件   
+1. 进入myso/msg 目录下，执行make命令，生成libprocess.so       
+2. 进入src目录，执行mkdir msg && cp -ap ../myso/msg/libprocess.so  msg   
+3. 进入src目录，执行/usr/local/databus/bus -x msg_test -p 18889 -m 127.0.0.1:9999    
+  
 
-六. 根据设定配置，执行命令
-1. 在configservice页面选择info source,检查下上下游配置是否正确
-2. 然后执行启动全量复制就开始全量复制，全量后要增量复制，修改选项，再执行启动增量复制就可以了
-3. 选择info, 检查是否有error信息
+四. 建立上游数据库     
+1. 启动mysql数据库，建立要导出的heart_beat表     
 
-这里说的这些对于真正要run起来还是不太够的，我们的思路其实很清晰
-1. 所有的配置都要存在configservice中，所以所有的配置都在页面上完成，配置有些复杂
-2. bus启动不需要配置文件，但是需要制定configservice的dns和port
+五. 建立下游数据库   
+1. 启动redis数据库   
+
+六. 根据设定配置，执行命令    
+1. 在configservice页面选择info source,检查下上下游配置是否正确   
+2. 然后执行启动全量复制就开始全量复制，全量后要增量复制，修改选项，再执行启动增量复制就可以了   
+3. 选择info, 检查是否有error信息    
+   
+
+这里说的这些对于真正要run起来还是不太够的，我们的思路其实很清晰   
+1. 所有的配置都要存在configservice中，所以所有的配置都在页面上完成，配置有些复杂    
+2. bus启动不需要配置文件，但是需要制定configservice的dns和port    
 3. 我们的底层运维系统采用了salt, 我们的web服务器运行在master上，所以bus的启动，日志查看都在web页面上完成，
-同时bus，支持采用redis协议对其监控，启动关闭传输，关闭程序等操作
+同时bus，支持采用redis协议对其监控，启动关闭传输，关闭程序等操作   
 
