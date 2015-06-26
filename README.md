@@ -8,13 +8,12 @@
 
 程序作为基础组件，在新浪以及微博的数据运维中，其可靠性得到了充分验证
 
-使用方式如下： 
+使用方式如下：     
 一. 启动configservice  
 1. 在linux上下载后，进入程序目录，执行make，检查make是否成功，如果失败，将编译结果贴上来  
 2. redis官网下载redis随便一个版本, 安装，并运行，得到redis_ip, redis_port  
 3. 进入bus_manager/business目录，修改views.py文件,填入具体的redis_ip, redis_port
 4. 然后返回bus_manger目录，执行nohup python manage.py runserver 0.0.0.0:8888 &   
-    
     
 
 二. 配置msg_test模拟业务   
