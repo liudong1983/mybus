@@ -8,35 +8,38 @@
 
 程序作为基础组件，在新浪以及微博的数据运维中，其可靠性得到了充分验证
 
-使用方式如下：     
-一. 启动configservice  
-1. 在linux上下载后，进入程序目录，执行make，检查make是否成功，如果失败，将编译结果贴上来  
+使用方式如下：  
+一. 编译程序
+1. 进入mybus目录，执行make命令，如果make失败，请将结果贴出来    
+
+二. 启动configservice  
 2. redis官网下载redis随便一个版本, 安装，并运行，得到redis_ip, redis_port  
-3. 进入bus_manager/business目录，修改views.py文件,填入具体的redis_ip, redis_port
+3. 进入bus_manager/business目录，修改views.py文件,填入具体的redis_ip, redis_port   
 4. 然后返回bus_manger目录，执行nohup python manage.py runserver 0.0.0.0:8888 &   
     
 
-二. 配置msg_test模拟业务   
+三. 配置msg_test模拟业务   
 1. 打开浏览器，执行http://host:8888, 打开configservice页面      
 2. 添加业务msg_test  
 3. 配置msg_test,配置较为复杂，后面会详细介绍，字符集转换慎用，最好下游和上游数据集一致   
 4. 配置schema的时候，db和table的名字请用正则表达式，对于列，请采用c1#c2#c3的形式，统计开关，用来确定这个表的数据是否要统计    
 
 
-三. 编译转换插件   
+四. 编译转换插件并copy到具体位置 
 1. 进入myso/msg 目录下，执行make命令，生成libprocess.so       
 2. 进入src目录，执行mkdir msg && cp -ap ../myso/msg/libprocess.so  msg   
 3. 进入src目录，执行/usr/local/databus/bus -x msg_test -p 18889 -m 127.0.0.1:9999    
   
 
-四. 建立上游数据库     
+五. 建立上游数据库,我们选用的mysql版本为5.5     
 1. 启动mysql数据库，建立要导出的heart_beat表     
 
-五. 建立下游数据库   
+六. 建立下游数据库,redis数据库版本没有具体要求   
 1. 启动redis数据库   
 
-六. 根据设定配置，执行命令    
+七. 根据设定配置，执行命令    
 1. 在configservice页面选择info source,检查下上下游配置是否正确   
+2. 在configservice页面选择info matchschema,检查导出对应的schema信息是否正确    
 2. 然后执行启动全量复制就开始全量复制，全量后要增量复制，修改选项，再执行启动增量复制就可以了   
 3. 选择info, 检查是否有error信息    
    
