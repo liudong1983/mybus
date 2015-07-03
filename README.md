@@ -10,10 +10,11 @@
 
 使用方式如下：  
 一. 编译程序
-1. 进入mybus目录，执行make命令，如果make失败，请将结果贴出来    
+1. 代码中包含了链接mysql以及hbase的库，目前支持centos5/centos6,centos7暂不支持   
+2. 进入mybus目录，执行make命令，如果make失败，请将结果贴出来    
 
 二. 启动configservice  
-2. redis官网下载redis随便一个版本, 安装，并运行，得到redis_ip, redis_port  
+2. redis官网下载redis随便一个版本, 安装，并运行，得到redis_ip, redis_port，暂不支持rediscluster    
 3. 进入bus_manager/business目录，修改views.py文件,填入具体的redis_ip, redis_port   
 4. 然后返回bus_manger目录，执行nohup python manage.py runserver 0.0.0.0:8888 &   
     
