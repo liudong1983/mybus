@@ -56,7 +56,7 @@
 2. 需要hbase开启thrift server
 3. 支持配置多个thrift server,只要有一个thrift server活着，就能够保持同步   
 
-关于mysql部署问题
+关于mysql部署问题     
 1. 强烈建议采用两级结构，第一级mysql主库，开启行复制，然后直接挂databus，这样的好处是如果mysql crash，  
 方便恢复，如果采用三级结构，恢复的时候相当复杂     
 
